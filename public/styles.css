@@ -1,0 +1,35 @@
+/* This section styles the main body of the page */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #1f1f23;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* This styles your main headings */
+.heading {
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+/* This styles your standard text paragraphs */
+.paragraph {
+  color: #999999;
+  margin-bottom: 20px;
+}
+
+/* This styles your clickable links */
+.link {
+  color: #6568ff;
+}
+
+/* This changes how links look when you move your mouse over them */
+.link:hover {
+  text-decoration: underline;
+}
+
+/* This keeps your content centered and easy to read on big screens */
+.container {
+  max-width: 800px;
+}
