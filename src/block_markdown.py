@@ -18,21 +18,21 @@ def markdown_to_blocks(markdown):
     return filtered_blocks
 
 def block_to_block_type(block):
+    lines = block.split("\n")
+
     # 1. Heading Validation (1-6 '#' followed strictly by a space)
     if block.startswith("#"):
-        lines = block.split("\n")
-        if len(lines) == 1:  # Headings must be a single line
-            for i in range(1, 7):
-                if block.startswith("#" * i + " "):
-                    return BlockType.HEADING
+        for i in range(1, 7):
+            if block.startswith("#" * i + " "):
+                return BlockType.HEADING
 
-    # 2. Code Block Validation (Must start and end with triple backticks)
+    # 2. Code Block Validation (Must start with ```\n and end with ```)
     if block.startswith("```") and block.endswith("```"):
-        if len(block) >= 6:  # Minimum valid empty code block structure
+        # Explicit check for the markdown block specification constraint
+        if len(lines) > 1 and lines[0].startswith("```"):
             return BlockType.CODE
 
     # 3. Blockquote Validation (Every line must start with '>')
-    lines = block.split("\n")
     if block.startswith(">"):
         all_quoted = True
         for line in lines:
@@ -42,7 +42,7 @@ def block_to_block_type(block):
         if all_quoted:
             return BlockType.QUOTE
 
-    # 4. Unordered List Validation (Every line must start with '- ' or '* ')
+    # 4. Unordered List Validation (Every line must start strictly with '- ' or '* ')
     if block.startswith("- ") or block.startswith("* "):
         all_unordered = True
         delim = "- " if block.startswith("- ") else "* "
