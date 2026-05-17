@@ -34,15 +34,6 @@ Thumbs.db
 *.tmp
 *.env
 
-# Build Output
-public/
-!public/index.html
-!public/style.css
-!public/script.js
-!public/assets/
-!public/assets/**/*
-!public/.gitkeep
-!public/assets/.gitkeep
 
 # SSG Specific - Generated Build Output & Internal Caches
 # ----------------------------------------------------
@@ -53,4 +44,4 @@ output/
 .ssg-cache/
 cache/
 temp/
-log/
+log/__pycache__/
