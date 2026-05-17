@@ -101,9 +101,23 @@ def split_nodes_link(old_nodes):
 
 def text_to_textnodes(text):
     nodes = [TextNode(text, TextType.TEXT)]
+    
+    # 1. Split bold (** remains the standard for bold)
     nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    
+    # 2. Split italic using asterisks
     nodes = split_nodes_delimiter(nodes, "*", TextType.ITALIC)
+    
+    # 3. Split italic using underscores
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+    
+    # 4. Split inline code (Fixed to point to TextType.CODE)
     nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+
+    # 5. Split markdown images into image text nodes
     nodes = split_nodes_image(nodes)
+    
+    # 6. Split markdown links into link text nodes
     nodes = split_nodes_link(nodes)
+    
     return nodes
