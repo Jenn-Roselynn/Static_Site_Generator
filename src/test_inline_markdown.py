@@ -1,6 +1,10 @@
 import unittest
 from textnode import TextNode, TextType
-from inline_markdown import split_nodes_delimiter
+from inline_markdown import (
+    split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links
+)
 
 class TestInlineMarkdown(unittest.TestCase):
     def test_split_delimiter_code(self):
@@ -39,10 +43,35 @@ class TestInlineMarkdown(unittest.TestCase):
         )
 
     def test_split_delimiter_unclosed(self):
-        # Verify that unclosed markdown elements trigger a syntax ValueError
         node = TextNode("This is broken **bold text", TextType.TEXT)
         with self.assertRaises(ValueError):
             split_nodes_delimiter([node], "**", TextType.BOLD)
+
+    # --- Regex Extraction Tests ---
+
+    def test_extract_markdown_images(self):
+        # Test extraction of multiple images from a single string
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        matches = extract_markdown_images(text)
+        self.assertListEqual(
+            [
+                ("rick roll", "https://i.imgur.com/aKaOqIh.gif"),
+                ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")
+            ],
+            matches
+        )
+
+    def test_extract_markdown_links(self):
+        # Test extraction of multiple links from a single string, ensuring images are ignored
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev) but ignores ![cat pic](https://cats.com/cat.jpg)"
+        matches = extract_markdown_links(text)
+        self.assertListEqual(
+            [
+                ("to boot dev", "https://www.boot.dev"),
+                ("to youtube", "https://www.youtube.com/@bootdotdev")
+            ],
+            matches
+        )
 
 if __name__ == "__main__":
     unittest.main()
